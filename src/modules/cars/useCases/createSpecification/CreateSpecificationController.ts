@@ -9,7 +9,7 @@ class CreateSpecificationController {
 
     const createSpecificationUseCase = container.resolve(CreateSpecificationUseCase);
 
-    createSpecificationUseCase.execute({
+    await createSpecificationUseCase.execute({
       name,
       description,
     });
