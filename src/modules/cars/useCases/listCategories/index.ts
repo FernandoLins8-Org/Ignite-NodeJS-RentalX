@@ -1,4 +1,5 @@
-import CategoriesRepository from '../../repositories/implementations/CategoriesRepository';
+import CategoriesRepository from '@modules/cars/infra/typeorm/repositories/CategoriesRepository';
+
 import ListCategoriesController from './ListCategoriesController';
 import ListCategoryUseCase from './ListCategoriesUseCase';
 
