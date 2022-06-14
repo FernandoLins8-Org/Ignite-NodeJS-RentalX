@@ -23,6 +23,13 @@ class DayjsDateProvider implements IDateProvider {
   dateNow() {
     return dayjs().toDate();
   }
+
+  daysBetweenDates(start_date: Date, end_date: Date): number {
+    const StartDateUTC = this.convertToUTC(start_date);
+    const EndDateUTC = this.convertToUTC(end_date);
+
+    return dayjs(EndDateUTC).diff(StartDateUTC, 'days');
+  }
 }
 
 export { DayjsDateProvider };
