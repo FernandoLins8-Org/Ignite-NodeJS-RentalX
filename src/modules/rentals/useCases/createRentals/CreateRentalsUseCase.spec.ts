@@ -121,12 +121,12 @@ describe('Create Rental', () => {
   });
 
   it('should not be able to create a new rental with expected return time less than 24h', async () => {
-    await expect(async () => {
-      await createRentalsUseCase.execute({
+    await expect(
+      createRentalsUseCase.execute({
         user_id: '1234',
         car_id: '4321',
         expected_return_date: new Date(),
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      }),
+    ).rejects.toEqual(new AppError('Rental minimum time is 24h'));
   });
 });

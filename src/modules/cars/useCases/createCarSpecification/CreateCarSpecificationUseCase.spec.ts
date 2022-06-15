@@ -51,42 +51,42 @@ describe('Create Car Specification', () => {
   });
 
   it('should not be able to add a new specification to a non existing car', async () => {
-    expect(async () => {
-      const fakeCarId = '1234';
+    const fakeCarId = '1234';
 
-      await specificationsRepositoryInMemory.create({
-        name: 'teste',
-        description: 'test',
-      });
-      const specification = await specificationsRepositoryInMemory.findByName('teste');
+    await specificationsRepositoryInMemory.create({
+      name: 'teste',
+      description: 'test',
+    });
+    const specification = await specificationsRepositoryInMemory.findByName('teste');
 
-      await createCarSpecificationUseCase.execute({
+    await expect(
+      createCarSpecificationUseCase.execute({
         car_id: fakeCarId,
         specifications_ids: [specification.id],
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      }),
+    ).rejects.toEqual(new AppError('Car does not exist'));
   });
 
-  it('should not be able to add a non existing specification to a car', () => {
-    expect(async () => {
-      const carInfo = {
-        name: 'Nissan 350Z',
-        description: '',
-        daily_rate: 300,
-        license_plate: 'ABC-3500',
-        fine_amount: 100,
-        brand: 'Nissan',
-        category_id: 'category',
-      };
-      await createCarUseCase.execute(carInfo);
-      const car = await carsRepositoryInMemory.findByLicensePlate(carInfo.license_plate);
+  it('should not be able to add a non existing specification to a car', async () => {
+    const carInfo = {
+      name: 'Nissan 350Z',
+      description: '',
+      daily_rate: 300,
+      license_plate: 'ABC-3500',
+      fine_amount: 100,
+      brand: 'Nissan',
+      category_id: 'category',
+    };
+    await createCarUseCase.execute(carInfo);
+    const car = await carsRepositoryInMemory.findByLicensePlate(carInfo.license_plate);
 
-      const fakeSpecIds = ['5678', '12345'];
+    const fakeSpecIds = ['5678', '12345'];
 
-      await createCarSpecificationUseCase.execute({
+    await expect(
+      createCarSpecificationUseCase.execute({
         car_id: car.id,
         specifications_ids: fakeSpecIds,
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      }),
+    ).rejects.toEqual(new AppError('Specifications not found'));
   });
 });
