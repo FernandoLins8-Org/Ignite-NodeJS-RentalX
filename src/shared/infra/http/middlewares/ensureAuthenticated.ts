@@ -1,6 +1,7 @@
 import { Request, NextFunction, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 
+import auth from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
 interface IPayload {
@@ -17,7 +18,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
   const [, token] = authHeader.split(' ');
 
   try {
-    const { sub: user_id } = verify(token, 'b09f5e231a991b7e8d3319d400fa9f38') as IPayload;
+    const { sub: user_id } = verify(token, auth.secret_refresh_token) as IPayload;
     req.user_id = user_id;
   } catch (err) {
     throw new AppError('Invalid token', 401);
