@@ -18,7 +18,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
   const [, token] = authHeader.split(' ');
 
   try {
-    const { sub: user_id } = verify(token, auth.secret_token) as IPayload;
+    const { sub: user_id } = verify(token, auth.tokenSecret) as IPayload;
     req.user_id = user_id;
   } catch (err) {
     throw new AppError('Invalid token', 401);
